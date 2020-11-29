@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using ControllerT.stor;
 
 namespace ControllerT
 {
@@ -23,9 +24,12 @@ namespace ControllerT
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers()
-     
-                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddSingleton(typeof(Storage<>));
+            services.
+                AddMvc(o => o.Conventions.Add(new GenericControllerRouteConvention())).
+                //ConfigureApplicationPartManager(m => m.FeatureProviders.Add(new GenericTypeControllerFeatureProvider()));
+                ConfigureApplicationPartManager(m => m.FeatureProviders.Add(new RemoteControllerFeatureProvider()))
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddApiVersioning(config =>
             {

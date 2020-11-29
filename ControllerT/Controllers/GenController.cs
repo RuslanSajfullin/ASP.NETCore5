@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ControllerT.stor;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -9,39 +10,37 @@ namespace ControllerT.Controllers
 {
     [ApiController, ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    public class GenController : ControllerBase
+    public class GenController<T> : Controller where T : class
     {
-        private readonly ILogger<GenController> _logger;
+        private Storage<T> _storage;
+
+        public GenController(Storage<T> storage)
+        {
+            _storage = storage;
+        }
+
+
+        private readonly ILogger<GenController<T>> _logger;
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        public IEnumerable<T> Get()
         {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
+            return _storage.GetAll();
         }
 
-
-        [HttpPost]
-        public IEnumerable<WeatherForecast> Post()
-
+        [HttpGet("{id}")]
+        public T Get(Guid id)
         {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
+            return _storage.GetById(id);
         }
-    }
+
+        [HttpPost("{id}")]
+        public void Post(Guid id, [FromBody] T value)
+        {
+            _storage.Add(id, value);
+        }
+    }   
 }

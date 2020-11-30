@@ -19,12 +19,8 @@ namespace ControllerT.Controllers
             _storage = storage;
         }
 
-
         private readonly ILogger<GenController<T>> _logger;
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
+  
         [HttpGet]
         public IEnumerable<T> Get()
         {

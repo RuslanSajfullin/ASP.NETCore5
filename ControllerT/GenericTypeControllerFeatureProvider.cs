@@ -18,7 +18,6 @@ namespace ControllerT
             foreach (var candidate in candidates)
             {
                 feature.Controllers.Add(typeof(GenController<>).MakeGenericType(candidate).GetTypeInfo());
-
             }
         }
     }

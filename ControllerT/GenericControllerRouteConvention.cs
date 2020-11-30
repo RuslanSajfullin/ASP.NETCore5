@@ -17,17 +17,17 @@ namespace ControllerT
                 var genericType = controller.ControllerType.GenericTypeArguments[0];
                 var customNameAttribute = genericType.GetCustomAttribute<GeneratedControllerAttribute>();
 
-                if (customNameAttribute?.Route != null)
-                {
-                    controller.Selectors.Add(new SelectorModel
-                    {
-                        AttributeRouteModel = new AttributeRouteModel(new RouteAttribute(customNameAttribute.Route)),
-                    });
-                }
-                else
-                {
+                //if (customNameAttribute?.Route != null)
+                //{
+                //    controller.Selectors.Add(new SelectorModel
+                //    {
+                //        AttributeRouteModel = new AttributeRouteModel(new RouteAttribute(customNameAttribute.Route)),
+                //    });
+                //}
+                //else
+                //{
                     controller.ControllerName = genericType.Name;
-                }
+                //}
             }
         }
     }
